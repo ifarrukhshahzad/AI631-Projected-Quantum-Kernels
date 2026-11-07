@@ -6,12 +6,12 @@
   "best": {
     "score": 0.825,
     "alpha": 1.0,
-    "C": 10.0
+    "C": 10
   },
   "best_L1": {
     "score": 0.8375,
     "alpha": 2.0,
-    "C": 10.0
+    "C": 10
   },
   "results": {
     "Fidelity L=2 (sampled)": {
