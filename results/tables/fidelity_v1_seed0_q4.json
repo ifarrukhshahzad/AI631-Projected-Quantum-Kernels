@@ -1,0 +1,38 @@
+{
+  "seed": 0,
+  "n_qubits": 4,
+  "layers": 2,
+  "shots": 2048,
+  "best": {
+    "score": 0.825,
+    "alpha": 1.0,
+    "C": 10.0
+  },
+  "best_L1": {
+    "score": 0.8375,
+    "alpha": 2.0,
+    "C": 10.0
+  },
+  "results": {
+    "Fidelity L=2 (sampled)": {
+      "acc": 0.8,
+      "auc": 0.885
+    },
+    "Fidelity L=2 (exact ref)": {
+      "acc": 0.825,
+      "auc": 0.9349999999999999
+    },
+    "Fidelity L=1 (closed form)": {
+      "acc": 0.8,
+      "auc": 0.92
+    }
+  },
+  "resources": {
+    "qubits": 4,
+    "depth": 14,
+    "two_qubit_gates": 12,
+    "circuits_per_eval": 6360,
+    "shots_per_eval": 13025280
+  },
+  "qiskit": "2.6.2"
+}
