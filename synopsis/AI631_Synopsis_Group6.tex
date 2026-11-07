@@ -1,0 +1,86 @@
+\documentclass[conference]{IEEEtran}
+\usepackage{amsmath,amssymb}
+\usepackage{booktabs}
+\usepackage{url}
+
+
+
+\begin{document}
+
+\title{Projected Quantum Kernels and the Geometric Test for Advantage\\
+\large AI 631 Quantum Machine Learning, Fall 2026 --- Project Synopsis (Project \#6)}
+
+\author{\IEEEauthorblockN{Farrukh Shahzad (25280034), Shams ul Arifeen (25280080), Haider Nadeem (25280003)}
+\IEEEauthorblockA{Lahore University of Management Sciences (LUMS)\\
+Code: \url{https://github.com/ifarrukhshahzad/AI631-Projected-Quantum-Kernels}}}
+
+\maketitle
+
+\begin{abstract}
+Huang \textit{et al.}~\cite{huang2021} proposed the geometric difference as a data-dependent indicator of when a quantum kernel can outperform a classical one, and introduced projected quantum kernels. We test these ideas at small scale: fidelity and projected quantum kernels versus tuned classical kernels on PCA-reduced Fashion-MNIST and on a relabeled dataset adapted from~\cite{huang2021}, in noise-free simulation, under a noise model, and in a small IBM hardware experiment.
+\end{abstract}
+
+\section{Introduction and Motivation}
+Quantum kernels measure data similarity using quantum states prepared by a data-encoding circuit, for use in a support vector machine (SVM)~\cite{schuld2019,havlicek2019}. A large feature space alone does not guarantee better learning: Huang \textit{et al.}~\cite{huang2021} showed that with enough training data classical models can often match quantum ones, and that the \emph{geometric difference} between a classical kernel matrix $K^{C}$ and a quantum kernel matrix $K^{Q}$ helps assess the potential for a prediction advantage over classical kernels. They also introduced \emph{projected quantum kernels} built from one-qubit reduced density matrices (1-RDMs).
+
+\section{Research Question}
+\textbf{Question:} At small scale (simulator and IBM hardware), is the geometric difference associated with when a fidelity or projected quantum kernel outperforms classical kernels?
+\textbf{Sub-questions:} (1) how fidelity and projected kernels compare with tuned RBF, polynomial and linear kernels on original labels; (2) how $g$ changes with qubit count and whether it tracks the accuracy gap; (3) whether the advantage indicated by a large $g$ appears on the relabeled dataset; (4) how finite shots and noise change projected-kernel features and accuracy.
+
+\section{Falsifier}
+The geometric difference indicates only the \emph{potential} for an advantage~\cite{huang2021}; we test the project's empirical hypothesis under our setup, not the mathematical result of~\cite{huang2021}. Each quantum kernel (fidelity, projected) is evaluated separately on the same splits as the classical models. For seed $s$, $\Delta A_s = A^{Q}_s - A^{C^\ast}_s$, where $C^\ast$ is the classical kernel with the highest training cross-validation accuracy (the test set is used only for final evaluation); we report $\overline{\Delta A}$ and $\sigma_{\Delta A}$. As a project-specific heuristic (not a significance test), a quantum kernel shows an \emph{improvement} if $\overline{\Delta A} > \sigma_{\Delta A}$; failing this means no improvement was demonstrated, not that equality or inferiority is proved. $g_\lambda$ (Sec.~IV-B) is treated as a continuous variable from training data; any thresholds used for the conditional falsifier will be specified using training-data diagnostics before test accuracies are examined. The hypothesis is unsupported if (i) on the engineered dataset, where $g_\lambda(K^{C^\ast}\|K^{Q})$ is large relative to the original task, no quantum kernel shows an improvement; or (ii) on the original labels, where $g_\lambda$ is small, a quantum kernel shows an improvement over $C^\ast$. If no setting with a clearly larger $g_\lambda$ is obtained, (i) is reported as untested (inconclusive).
+
+\section{Methods}
+\subsection{Kernels and Encoding}
+\textbf{Encoding (proposed):} features are scaled to $[-1,1]$ (fitted on training data); a block of $R_y(\alpha x_i)$ on each qubit $i$ followed by a CNOT chain between neighbours is repeated $L$ times from $|0\rangle^{\otimes n}$. The main setting is $L=2$; $L=1$ is a baseline, because for one layer the data-independent CNOT block cancels in the overlap and the fidelity kernel reduces to $\prod_i\cos^2\!\big(\alpha(x_i-x_i')/2\big)$, which is classically easy (this cancellation does not apply to the projected kernel). $L=2$ is not claimed to give any computational advantage. Both quantum kernels share the circuit architecture; $\alpha$ is tuned per kernel by training cross-validation. Qubits and PCA features are varied jointly ($n=2$--$8$) with $L$ and connectivity fixed; this sweep also changes gate counts, which we report.
+
+\textbf{Fidelity kernel:} ideally $k^{Q}(x,x') = |\langle \psi(x)|\psi(x')\rangle|^{2}$. With finite shots or noise we use the estimator $\hat k^{Q}$ = probability of the all-zero outcome of the compute--uncompute circuit $U(x')^\dagger U(x)$; under noise this is a circuit probability, not the fidelity of two mixed states.
+
+\textbf{Projected kernel:} the 1-RDM of qubit $k$ is
+\begin{equation}
+\rho_k(x)=\tfrac{1}{2}\big(I+\langle X_k\rangle_x X+\langle Y_k\rangle_x Y+\langle Z_k\rangle_x Z\big),
+\end{equation}
+\begin{equation}
+k^{PQ}(x,x') = \exp\!\Big(-\gamma \sum_{k}\big\|\rho_k(x)-\rho_k(x')\big\|_F^{2}\Big),
+\end{equation}
+where $\|\rho_k(x)-\rho_k(x')\|_F^2=\tfrac{1}{2}\sum_{P\in\{X,Y,Z\}}\big(\langle P_k\rangle_x-\langle P_k\rangle_{x'}\big)^2$. For a general one-qubit state, $X$, $Y$ and $Z$ determine the 1-RDM. For our ideal $R_y$--CNOT encoding, amplitudes are real and $Y$ expectations vanish; we retain $Y$ measurements as a consistency check under sampling and device noise. Measurement: $Z$ directly; $X$ after $H$; $Y$ after applying $S^\dagger$, followed by $H$. Each basis circuit gives that Pauli for all qubits, so features are computed once per sample and reused for every pair.
+
+\textbf{Classical baselines:} RBF, polynomial and linear kernels, tuned by training cross-validation.
+
+\subsection{Geometric Difference}
+The ideal definition~\cite{huang2021}, with kernels normalised to trace $N$, is $g=\sqrt{\|\sqrt{K^{Q}}(K^{C})^{-1}\sqrt{K^{Q}}\|_{\infty}}$. Since $K^{C}$ can be singular (the linear kernel is rank-deficient when samples far exceed features), we compute the regularised diagnostic
+\begin{equation}
+g_\lambda(K^{C}\|K^{Q}) = \sqrt{\Big\|(K^{Q})^{1/2}\,(K^{C}+\lambda I)^{-1}(K^{Q})^{1/2}\Big\|_{2}},
+\end{equation}
+with principal square roots by eigendecomposition. $\lambda$ is fixed by a predefined numerical rule, never by test accuracy: the smallest value in $\{10^{-6},\dots,10^{-2}\}$ for which the condition number of $K^{C}+\lambda I$ is below $10^{8}$; the same rule is used in label generation, and sensitivity of $g_\lambda$ to $\lambda$ is reported. $g_\lambda$ is computed on training samples, from ideal (noise-free) quantum kernels only. The primary analysis plots each quantum kernel's $\Delta A$ against $g_\lambda(K^{C^\ast}\|K^{Q})$ per seed; all six pairs \{fidelity, projected\}$\times$\{RBF, polynomial, linear\} are reported separately.
+
+\subsection{Engineered Dataset (adapted from~\cite{huang2021})}
+We adapt the construction in the supplementary information of~\cite{huang2021}. On the full subsample, with fixed hyperparameters, $K^{C}$ is a fixed RBF reference and $K^{Q}$ the projected kernel; we take the top eigenvector $v$ of $(K^{Q})^{1/2}(K^{C}+\lambda I)^{-1}(K^{Q})^{1/2}$, form $y=(K^{Q})^{1/2}v$, and threshold at the median (ties broken deterministically by sample index) to get balanced binary labels. Labels are generated separately for each $n$, so each qubit count defines its own task. PCA and scaling for label generation are fitted once on the full subsample, only to define the task; labels are frozen before the split, and evaluation refits PCA and scaling on training folds only. This is a controlled, dataset-dependent benchmark, not an independently labelled task; the RBF reference, median thresholding and refitting are simplifications, so any advantage must be shown empirically.
+
+\subsection{Data, Noise and Protocol}
+Fashion-MNIST~\cite{xiao2017}, T-shirt/top vs.\ Shirt (visually similar). Proposed size: 300 training (150 per class) and 100 test (50 per class) images; 5 seeds, each varying the subsample, the stratified split (by original or engineered labels) and shot sampling; 5-fold cross-validation inside training data. Experiments use Qiskit and the course NB11 capstone harness for folds, leakage-free preprocessing, baselines, ablations and noise sweeps. The proposed noise model is a backend-derived Qiskit Aer model (no calibration values are assumed here). Finite-shot ideal and noisy simulations use matched shot budgets, the same samples and encoding parameters; noisy results include both sampling error and modelled device errors. Estimated fidelity matrices are checked for symmetry and positive semidefiniteness, and any repair (eigenvalue clipping) is disclosed; projected kernels built from one cached feature vector per sample need no repair.
+
+\textbf{Reported:} test accuracy (mean $\pm$ std over seeds); paired $\Delta A$ vs.\ $g_\lambda$ as a function of $n$; ideal vs.\ finite-shot vs.\ noisy kernels; qubits, transpiled depth, two-qubit gates, fidelity cost per evaluated pair, projected-feature cost per sample, and total circuits and shots.
+
+\subsection{IBM Hardware Component (proposed)}
+For about 10 test samples, $\langle X_k\rangle$, $\langle Y_k\rangle$, $\langle Z_k\rangle$ are estimated for all qubits (3 basis circuits per sample, about 4{,}000 shots each, roughly 120{,}000 shots per configuration excluding repeats). These are compared with exact, finite-shot and noisy simulator values for the same samples, validating projected-kernel features (not hardware classification). Backend, job IDs, layout, transpiled depth and any mitigation are reported. \textbf{Risks:} simulation cost (at most 8 qubits, smaller samples if needed), ill-conditioned $K^{C}$ (rule above), hardware queues (submitted early in week 3).
+
+\section{Work Split and Plan}
+\textbf{Ownership:} Farrukh --- fidelity kernel and IBM hardware run; Shams --- projected (1-RDM) kernel and noise model; Haider --- classical kernels, geometric difference and engineered dataset. All first agree on a shared interface (data, scaling, encoding, normalisation, seeds, split IDs).
+\begin{itemize}
+\item \textbf{Week 1 (Nov 9--15):} Haider: data loading, PCA, fixed folds and seeds, classical SVM baselines. Farrukh: encoding circuit, fidelity kernel on 2--4 qubits, IBM test job. Shams: 1-RDM extraction from simulated states. Report: introduction and methods.
+\item \textbf{Week 2 (Nov 16--22):} Shams: projected kernel and bandwidth tuning; noise-model kernels. Haider: geometric difference and the relabeled dataset. Farrukh: qubit-count and shot-count studies for the fidelity kernel. Report: results draft with accuracy-vs-$g$ figures.
+\item \textbf{Week 3 (Nov 23--29):} Farrukh: hardware estimation of Pauli $X,Y,Z$ values for about 10 samples. Shams: simulator values for the same samples and the four-level comparison. Haider: final $g$-vs-accuracy analysis. All: report draft and talk.
+\item \textbf{Week 4 (Nov 30--Dec 6):} final report and tagged GitHub release by December 6.
+\end{itemize}
+\textbf{Presentation:} on the assigned date, November 29 or December 6; each member presents their part.
+\textbf{Deliverables:} IEEE LaTeX report (PDF and source); GitHub repository with a README reproducing every figure and table, requirements, fixed seeds, saved kernels and results, and commits from every member.
+
+\begin{thebibliography}{4}
+\bibitem{huang2021} H.-Y. Huang, M. Broughton, M. Mohseni, R. Babbush, S. Boixo, H. Neven, and J. R. McClean, ``Power of data in quantum machine learning,'' \textit{Nat. Commun.}, vol. 12, p. 2631, 2021.
+\bibitem{schuld2019} M. Schuld and N. Killoran, ``Quantum machine learning in feature Hilbert spaces,'' \textit{Phys. Rev. Lett.}, vol. 122, p. 040504, 2019.
+\bibitem{havlicek2019} V. Havl\'{i}\v{c}ek \textit{et al.}, ``Supervised learning with quantum-enhanced feature spaces,'' \textit{Nature}, vol. 567, pp. 209--212, 2019.
+\bibitem{xiao2017} H. Xiao, K. Rasul, and R. Vollgraf, ``Fashion-MNIST: a novel image dataset for benchmarking machine learning algorithms,'' arXiv:1708.07747, 2017.
+\end{thebibliography}
+
+\end{document}
