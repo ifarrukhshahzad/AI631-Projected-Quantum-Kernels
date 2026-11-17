@@ -1,0 +1,29 @@
+{
+  "seed": 100,
+  "n_qubits": 4,
+  "settings": {
+    "alpha": 0.5,
+    "C": 0.001
+  },
+  "exact": {
+    "acc": 0.9,
+    "auc": 0.9775
+  },
+  "sampled": {
+    "acc": 0.9,
+    "auc": 0.98
+  },
+  "noisy": {
+    "acc": 0.9,
+    "auc": 0.9775
+  },
+  "kern_err_sampled": 0.006967019461499581,
+  "kern_err_noisy": 0.13799175343995848,
+  "mean_K_exact": 0.7431950391401166,
+  "mean_K_noisy": 0.6052032857001582,
+  "min_eig_noisy": 0.02085778753180325,
+  "g_exact": 3.2153511854061896,
+  "g_noisy": 2.9330309462242026,
+  "acc_c_star": 0.9,
+  "delta_A_noisy": 0.0
+}

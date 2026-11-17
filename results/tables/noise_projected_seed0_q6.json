@@ -1,0 +1,32 @@
+{
+  "seed": 0,
+  "n_qubits": 6,
+  "settings": {
+    "alpha": 2.0,
+    "gscale": 2.0,
+    "C": 1,
+    "gamma_noisy": 2.0106098239981054
+  },
+  "exact": {
+    "acc": 0.8,
+    "auc": 0.885
+  },
+  "sampled": {
+    "acc": 0.775,
+    "auc": 0.88
+  },
+  "noisy": {
+    "acc": 0.775,
+    "auc": 0.87
+  },
+  "feat_err_sampled": 0.016132310840825146,
+  "feat_err_noisy": 0.029061260751059918,
+  "mean_Y_noisy": 0.0007466634114583333,
+  "bloch_exact": 0.5113068138221342,
+  "bloch_noisy": 0.47049698003145984,
+  "mean_K_noisy": 0.1947663696784829,
+  "g_exact": 3.371192889241839,
+  "g_noisy": 3.3788471821715094,
+  "acc_c_star": 0.925,
+  "delta_A_noisy": -0.15000000000000002
+}
