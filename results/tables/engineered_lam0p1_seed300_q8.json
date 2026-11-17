@@ -1,0 +1,90 @@
+{
+  "seed": 300,
+  "n_qubits": 8,
+  "lam": 0.1,
+  "generator": {
+    "g_gen": 3.437636204663962,
+    "g_tra": 0.6744983014043912
+  },
+  "train_pos": 36,
+  "test_pos": 24,
+  "agree_with_original": 0.5333333333333333,
+  "baselines": {
+    "Majority class": {
+      "acc": 0.4,
+      "auc": 0.5,
+      "inner_cv": null,
+      "params": {}
+    },
+    "Logistic regression": {
+      "acc": 0.55,
+      "auc": 0.5625,
+      "inner_cv": 0.6,
+      "params": {
+        "C": 10
+      }
+    },
+    "SVM RBF (tuned)": {
+      "acc": 0.525,
+      "auc": 0.8046875,
+      "inner_cv": 0.6875,
+      "params": {
+        "C": 10,
+        "gamma": 10
+      }
+    },
+    "SVM polynomial (tuned)": {
+      "acc": 0.625,
+      "auc": 0.765625,
+      "inner_cv": 0.675,
+      "params": {
+        "C": 0.1,
+        "coef0": 1,
+        "degree": 5,
+        "gamma": 1
+      }
+    },
+    "SVM linear (tuned)": {
+      "acc": 0.5,
+      "auc": 0.578125,
+      "inner_cv": 0.575,
+      "params": {
+        "C": 1
+      }
+    }
+  },
+  "c_star": "SVM RBF (tuned)",
+  "acc_c_star": 0.525,
+  "projected": {
+    "best": {
+      "score": 0.8625,
+      "alpha": 1.0,
+      "gscale": 0.5,
+      "gamma": 0.6941079241388738,
+      "C": 1
+    },
+    "sampled": {
+      "acc": 0.725,
+      "auc": 0.9114583333333334
+    },
+    "exact": {
+      "acc": 0.725,
+      "auc": 0.9166666666666666
+    },
+    "mean_K": 0.5897490892072841
+  },
+  "delta_A": 0.19999999999999996,
+  "g_c_star": 5.70027571735036,
+  "fidelity": {
+    "best": {
+      "score": 0.7125,
+      "alpha": 2.0,
+      "C": 1
+    },
+    "sampled": {
+      "acc": 0.675,
+      "auc": 0.8072916666666666
+    }
+  },
+  "delta_A_fidelity": 0.15000000000000002
+}

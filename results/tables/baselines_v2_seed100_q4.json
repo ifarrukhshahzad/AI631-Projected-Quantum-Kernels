@@ -1,0 +1,50 @@
+{
+  "seed": 100,
+  "n_qubits": 4,
+  "results": {
+    "Majority class": {
+      "acc": 0.5,
+      "auc": 0.5,
+      "inner_cv": null,
+      "params": {}
+    },
+    "Logistic regression": {
+      "acc": 0.9,
+      "auc": 0.9600000000000001,
+      "inner_cv": 0.8125,
+      "params": {
+        "C": 0.001
+      }
+    },
+    "SVM RBF (tuned)": {
+      "acc": 0.9,
+      "auc": 0.9600000000000001,
+      "inner_cv": 0.8,
+      "params": {
+        "C": 0.001,
+        "gamma": 0.01
+      }
+    },
+    "SVM polynomial (tuned)": {
+      "acc": 0.9,
+      "auc": 0.9575,
+      "inner_cv": 0.7875,
+      "params": {
+        "C": 0.001,
+        "coef0": 1,
+        "degree": 2,
+        "gamma": 1
+      }
+    },
+    "SVM linear (tuned)": {
+      "acc": 0.9,
+      "auc": 0.9600000000000001,
+      "inner_cv": 0.8,
+      "params": {
+        "C": 0.001
+      }
+    }
+  },
+  "c_star": "SVM RBF (tuned)",
+  "shuffled_label_acc": 0.65
+}

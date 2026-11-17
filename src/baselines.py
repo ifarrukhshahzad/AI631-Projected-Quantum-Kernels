@@ -19,9 +19,8 @@ from sklearn.svm import SVC
 # Hyperparameter grids (tuned on inner CV of the training set only)
 C_GRID = [0.001, 0.01, 0.1, 1, 10, 100, 1000]
 GRIDS = {
-    "rbf": {"C": C_GRID, "gamma": [0.001, 0.01, 0.1, 1, 10, 100]},
-    "poly": {"C": C_GRID, "degree": [2, 3, 4],
-             "gamma": [0.01, 0.1, 1], "coef0": [0, 1]},
+    "rbf": {"C": C_GRID, "gamma": [0.01, 0.1, 1, 10]},
+    "poly": {"C": C_GRID, "degree": [2, 3, 4, 5], "gamma": [1], "coef0": [1]},
     "linear": {"C": C_GRID},
 }
 LOGREG_GRID = {"C": C_GRID}

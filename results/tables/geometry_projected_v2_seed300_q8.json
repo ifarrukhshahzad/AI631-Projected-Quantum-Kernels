@@ -1,0 +1,33 @@
+{
+  "seed": 300,
+  "n_qubits": 8,
+  "quantum": "projected",
+  "c_star": "SVM linear (tuned)",
+  "g": {
+    "SVM RBF (tuned)": {
+      "g": 2.9417175752380254,
+      "g_tra": 2.395305020032753,
+      "huang_lambda": null
+    },
+    "SVM polynomial (tuned)": {
+      "g": 2.687020249725053,
+      "g_tra": 1.292639347807968,
+      "huang_lambda": null
+    },
+    "SVM linear (tuned)": {
+      "g": 1.037858692554498,
+      "g_tra": 2.5124662175965278,
+      "huang_lambda": null
+    }
+  },
+  "g_c_star": 1.037858692554498,
+  "sensitivity_c_star": {
+    "0.001": 1.1956432364339533,
+    "0.01": 1.0473563763304488,
+    "0.1": 1.037858692554498,
+    "1.0": 0.9655779595682019
+  },
+  "acc_quantum": 0.825,
+  "acc_c_star": 0.85,
+  "delta_A": -0.025000000000000022
+}
