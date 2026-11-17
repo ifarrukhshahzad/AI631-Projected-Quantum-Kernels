@@ -32,8 +32,10 @@ def overlap_circuit(enc):
     if key not in _OV_CACHE:
         ov = unitary_overlap(enc, enc)
         ov.measure_all()
-        _OV_CACHE[key] = transpile(ov, SIM)
-    return _OV_CACHE[key]
+        # keep enc alive with its circuit, so Python can never reuse its id
+        # for a different (e.g. other qubit count) encoding circuit
+        _OV_CACHE[key] = (enc, transpile(ov, SIM))
+    return _OV_CACHE[key][1]
 
 
 def _run_pairs(tov, pairs, shots, seed):
