@@ -106,3 +106,20 @@ def save_counts(path, job_id, backend_name, counts, meta):
 def load_counts(path):
     d = json.loads(path.read_text())
     return d["job_id"], d["backend"], d["meta"], d["counts"]
+
+
+def mitigate_readout(F, p10, p01):
+    """Readout-error mitigation of Pauli features (week 4 / advantage test).
+
+    For qubit k, a measured expectation value is shrunk and shifted by the
+    readout errors:  <P_k>_meas = (1 - p10_k - p01_k) <P_k>_true + (p01_k - p10_k),
+    the same for X, Y and Z (the basis change happens before measurement).
+    We invert this per qubit and clip to [-1, 1]. p10, p01 come from
+    readout_errors() on the two calibration circuits of the SAME run.
+    F: array (n_samples, n_qubits, 3). Returns an array of the same shape.
+    """
+    F = np.asarray(F, float)
+    p10, p01 = np.asarray(p10, float), np.asarray(p01, float)
+    scale = 1.0 - p10 - p01
+    shift = p01 - p10
+    return np.clip((F - shift[None, :, None]) / scale[None, :, None], -1.0, 1.0)
