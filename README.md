@@ -94,7 +94,7 @@ QiskitRuntimeService.save_account(channel="ibm_quantum_platform", token="<your k
 
 ## How to reproduce
 
-Open the notebooks from the `notebooks/` folder and run them **in order** with *Run All*. Every random step has a fixed seed (data splits, inner CV folds, shot sampling, transpilation), so rerunning gives the same numbers. The only exception is real hardware, whose raw counts are saved and reloaded instead of rerun.
+Open the notebooks from the `notebooks/` folder and run them **in order** with *Run All*. Every random step has a fixed seed (data splits, inner CV folds, shot sampling, transpilation), so rerunning on the same computer gives the same numbers. The only exception is real hardware, whose raw counts are saved and reloaded instead of rerun. On a different computer, the simulator can shift an occasional shot count by one. In our check on Linux this changed one tied tuning choice: projected kernel, seed 0, $n=4$, which moves the $n=4$ projected mean from 0.720 to 0.735. Every other reported number matched. The saved files are the results we report.
 
 | # | notebook | owner | what it does | main outputs | run time |
 |---|---|---|---|---|---|
