@@ -34,7 +34,7 @@ $g \approx 3$ everywhere: the quantum kernels are geometrically different from t
 
 ✓ = passes the improvement rule.
 
-**3. Noise: the projected kernel is robust; the fidelity kernel is not.** Under the `ibm_kingston` noise model, accuracies change by at most 1.5 points. However, $g$ of the fidelity kernel moves by −9% to +13%, while $g$ of the projected kernel moves by under 1.5% (notebook 06).
+**3. Noise: the projected kernel is robust; the fidelity kernel is not.** Under the `ibm_kingston` noise model, accuracies change by at most 1.5 points. However, $g$ of the fidelity kernel drops by 9-13%, while $g$ of the projected kernel drops by at most 1.4% (notebook 06).
 
 **4. Does the 6-qubit advantage survive a real device?** (notebooks 10 and 11, engineered labels, $n=6$)
 
